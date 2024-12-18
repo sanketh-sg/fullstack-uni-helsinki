@@ -22,11 +22,6 @@ The course also emphasizes independent problem-solving and information-seeking s
 - **Exercises**: Solutions to programming tasks provided in the course.
 - **Projects**: End-to-end applications or projects developed during the course.
 
-## Course Details
-
-- **Credits**: 5-14 ECTS, including an optional associated project worth 1-10 credits.
-- **Partners**: Houston Inc, Terveystalo, Elisa, Unity Technologies, Konecranes.
-
 ## Prerequisites
 
 Participants are expected to have:
