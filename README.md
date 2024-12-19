@@ -16,12 +16,6 @@ Additional topics include:
 
 The course also emphasizes independent problem-solving and information-seeking skills.
 
-## Structure of This Repository
-
-- **Notes**: Insights and concepts learned during the course.
-- **Exercises**: Solutions to programming tasks provided in the course.
-- **Projects**: End-to-end applications or projects developed during the course.
-
 ## Prerequisites
 
 Participants are expected to have:
