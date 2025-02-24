@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-vars */
 import {useEffect, useState} from 'react'
 import Search from './Search'
 import AddNew from './AddNew'
 // import axios from 'axios'
 import phoneServices from '../services/phoneServices'
+import Notification from './Notification'
+
 import Person from './Person'
 
 function Phonebook() {
@@ -17,7 +20,7 @@ function Phonebook() {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchName, setSearchName] = useState('')
-
+    const [notification, setNotification] = useState({message: null, type: ""})
     // useEffect(() => {
     //     axios
     //         .get('http://localhost:3001/persons')
@@ -28,25 +31,29 @@ function Phonebook() {
     useEffect(() => {
         phoneServices
             .getAll()
-            .then(response => {
-                setPersons(response.data)
+            .then(initialPersons => {
+                setPersons(initialPersons.data)
             })},[])
 
     const addPerson = (event) => {
         event.preventDefault()
-        if(persons.find(person => person.name === newName)) {
-            let  personObj = persons.find(person => person.name)
-            personObj = {...personObj, number: newNumber}
-
-            phoneServices
-                .update(personObj.id, personObj)
-                .then(response => {
-                    setPersons(persons.map(person => person.id !== personObj.id ? person : response.data))
+        const existingPerson = persons.find(person => person.name === newName);
+        if(existingPerson){
+            const confirmUpdate = window.confirm(`${newName} is already added to the phonebook. Replace the old number with the new one?`)
+            if(confirmUpdate){
+                const personObj = {...existingPerson, number: newNumber}
+                phoneServices
+                    .update(existingPerson.id, personObj)
+                    .then(response => {
+                        setPersons(persons.map(person => person.id !== existingPerson.id ? person : response.data))
+                        setNotification({message: `Updated ${response.data.name}`, type: "success"})
+                    })
+                    .catch(error => {
+                        setNotification({message: `Information of ${existingPerson.name} has already been removed from the server`, type: "error"})
+                    })
                     setNewName('')
                     setNewNumber('')
-                })
-
-            alert(`${newName} is already added to the phonebook replace the old number with a new one?`)
+            }
             return
         }
 
@@ -59,9 +66,14 @@ function Phonebook() {
             .create(personObject)
             .then(response => {
                 setPersons(persons.concat(response.data))
-                setNewName('')
-                setNewNumber('')
+                setNotification({message: `Added ${response.data.name}`, type: "success"})
             })
+            .catch(error => {
+                setNotification({message: error.response.data.error, type: "error"})
+            })
+            setNewName('')
+            setNewNumber('')
+
 
         // setPersons(persons.concat(personObject))
         // setNewName('')
@@ -88,8 +100,11 @@ function Phonebook() {
                 // console.log(response)
                 setPersons(persons.filter(person => person.id !== id)) 
                 alert(`${response.data.name} deleted from the phonebook`)
+                setNotification({message: `${response.data.name} deleted from the phonebook`, type: "info"})
                 //update the state in react
-
+            })
+            .catch(error => {
+                setNotification({message: `Information of ${name} has already been removed from the server`, type: "error"})
             })
         }
     }
@@ -98,6 +113,7 @@ function Phonebook() {
     <div>
         <h2>Phonebook</h2>
         <br/> 
+        <Notification message={notification.message} type={notification.type} />
         <Search searchName={searchName} handleName={handleName} persons={persons}/>  
         <AddNew newName={newName} newNumber={newNumber} handlePerson={handlePerson} handleNumber={handleNumber} addPerson={addPerson} />
 
