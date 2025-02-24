@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react'
 import Search from './Search'
 import AddNew from './AddNew'
-import axios from 'axios'
+// import axios from 'axios'
+import phoneServices from '../services/phoneServices'
+import Person from './Person'
 
 function Phonebook() {
 
@@ -16,17 +18,35 @@ function Phonebook() {
     const [newNumber, setNewNumber] = useState('')
     const [searchName, setSearchName] = useState('')
 
+    // useEffect(() => {
+    //     axios
+    //         .get('http://localhost:3001/persons')
+    //         .then(response => {
+    //             setPersons(response.data)
+    //         })},[])
+            
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
+        phoneServices
+            .getAll()
             .then(response => {
                 setPersons(response.data)
             })},[])
-            
+
     const addPerson = (event) => {
         event.preventDefault()
         if(persons.find(person => person.name === newName)) {
-            alert(`${newName} is already added to the phonebook`)
+            let  personObj = persons.find(person => person.name)
+            personObj = {...personObj, number: newNumber}
+
+            phoneServices
+                .update(personObj.id, personObj)
+                .then(response => {
+                    setPersons(persons.map(person => person.id !== personObj.id ? person : response.data))
+                    setNewName('')
+                    setNewNumber('')
+                })
+
+            alert(`${newName} is already added to the phonebook replace the old number with a new one?`)
             return
         }
 
@@ -34,9 +54,18 @@ function Phonebook() {
             name: newName.trim(),
             number: newNumber.trim()
         }
-        setPersons(persons.concat(personObject))
-        setNewName('')
-        setNewNumber('')
+
+        phoneServices
+            .create(personObject)
+            .then(response => {
+                setPersons(persons.concat(response.data))
+                setNewName('')
+                setNewNumber('')
+            })
+
+        // setPersons(persons.concat(personObject))
+        // setNewName('')
+        // setNewNumber('')
     }
 
     const handlePerson = (event) => {
@@ -52,6 +81,18 @@ function Phonebook() {
         setSearchName(event.target.value)
     }
 
+    const handleDelete = (id, name) => {
+        if(window.confirm(`Delete ${name}?`)) {
+            phoneServices.deletePerson(id) //delete from backend not in react
+            .then(response => {
+                // console.log(response)
+                setPersons(persons.filter(person => person.id !== id)) 
+                alert(`${response.data.name} deleted from the phonebook`)
+                //update the state in react
+
+            })
+        }
+    }
 
   return (
     <div>
@@ -62,7 +103,14 @@ function Phonebook() {
 
         <h2>Numbers</h2>
         <div>
-            { persons.map(person => <div key={person.name}>{person.name} {person.number}</div>) }
+            {/* { persons.map(person => <div key={person.name}>{person.name} {person.number}</div>) } */}
+            { persons.map(person => <Person 
+                                        key={person.id} 
+                                        name={person.name} 
+                                        number={person.number} 
+                                        id={person.id} 
+                                        handleDelete={() => handleDelete(person.id, person.name)}/>
+                            )}
         </div>
     </div>
   )
