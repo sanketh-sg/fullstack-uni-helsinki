@@ -19,3 +19,12 @@ CORS (Cross-Origin Resource Sharing) is a security feature enforced by web brows
 Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
 
 Running on --> https://phonebook-app-ox3y.onrender.com/
+
+To make Express show static content, the page index.html and the JavaScript, etc., it fetches, we need a built-in middleware from Express called static.
+whenever Express gets an HTTP GET request it will first check if the dist directory contains a file corresponding to the request's address. If a correct file is found, Express will return it.
+
+Now HTTP GET requests to the address www.serversaddress.com/index.html or www.serversaddress.com will show the React frontend. GET requests to the address www.serversaddress.com/api/notes will be handled by the backend code.
+
+Because of our situation, both the frontend and the backend are at the same address, we can declare baseUrl as a relative URL.
+
+Mongoose could be described as an object document mapper (ODM), and saving JavaScript objects as Mongo documents is straightforward with this library.
