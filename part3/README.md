@@ -13,3 +13,9 @@ next is called at the end of function body which yields control to next middlewa
 
 used as app.use(middlewareName)
 middleware functions are called in the order that they're encountered by the JavaScript engine
+
+CORS (Cross-Origin Resource Sharing) is a security feature enforced by web browsers that prevents a frontend running on one origin (e.g., localhost:5173) from making requests to a backend running on a different origin (e.g., localhost:3001) unless the backend explicitly allows it.
+
+Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
+
+Running on --> https://phonebook-app-ox3y.onrender.com/
