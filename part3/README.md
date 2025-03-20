@@ -52,3 +52,6 @@ There is one important detail regarding the use of the findByIdAndUpdate method.
 
 # Validation and ESLint
 
+ESLint configuration file defines the files option with ["*/.js"], which tells ESLint to look at all JavaScript files in our project folder. 
+
+The plugins property provides a way to extend ESLint's functionality by adding custom rules, configurations, and other capabilities that are not available in the core ESLint library.
