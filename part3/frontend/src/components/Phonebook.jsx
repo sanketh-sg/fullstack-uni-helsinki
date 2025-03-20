@@ -2,7 +2,7 @@
 import {useEffect, useState} from 'react'
 import Search from './Search'
 import AddNew from './AddNew'
-// import axios from 'axios'
+import axios from 'axios'
 import phoneServices from '../services/phoneServices'
 import Notification from './Notification'
 
@@ -23,7 +23,7 @@ function Phonebook() {
     const [notification, setNotification] = useState({message: null, type: ""})
     // useEffect(() => {
     //     axios
-    //         .get('http://localhost:3001/persons')
+    //         .get('http://localhost:3001/api/persons')
     //         .then(response => {
     //             setPersons(response.data)
     //         })},[])

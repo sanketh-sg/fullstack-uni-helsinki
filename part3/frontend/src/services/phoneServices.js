@@ -1,6 +1,6 @@
 import axios from 'axios'
-// const baseUrl = 'http://localhost:3001/api/persons'
-const baseUrl = '/api/persons' // changed to relative path for render deployment
+const baseUrl = 'http://localhost:3001/api/persons'
+// const baseUrl = '/api/persons' // changed to relative path for render deployment
 
 const getAll = () => {
     return axios.get(baseUrl)
@@ -15,7 +15,7 @@ const update = (id, newObject) => {
 }
 
 const deletePerson = (id) => {
-    return axios.delete(`${baseUrl}/${id}`)
+    return axios.delete(`${baseUrl}/delete/${id}`)
 }
 
 export default { getAll, create, update, deletePerson }
