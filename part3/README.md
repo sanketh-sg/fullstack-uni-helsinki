@@ -28,3 +28,24 @@ Now HTTP GET requests to the address www.serversaddress.com/index.html or www.se
 Because of our situation, both the frontend and the backend are at the same address, we can declare baseUrl as a relative URL.
 
 Mongoose could be described as an object document mapper (ODM), and saving JavaScript objects as Mongo documents is straightforward with this library.
+https://mongoosejs.com/docs/api/model.html#Model.findById()
+
+# Error Handling
+
+there are cases where it is better to implement all error handling in a single place. This can be particularly useful if we want to report data related to errors to an external error-tracking system like Sentry.
+We pass the error forward with the next function. The next function is passed to the handler as the third parameter. The error that is passed forward is given to the next function as a parameter. 
+
+If next was called without an argument, then the execution would simply move onto the next route or middleware. If the next function is called with an argument, then the execution will continue to the error handler middleware.
+
+In Express error handlers are middleware that are defined with a function that accepts four parameters. 
+```javascript
+const errorHandler = (error, request, response, next) => {//some code}
+```
+Note that the error-handling middleware has to be the last loaded middleware, also all the routes should be registered before the error-handler!
+
+By default, Express does not automatically parse request bodies because:
+Parsing every request (even those that don’t need it) would be wasteful. Not all requests contain JSON. Some use URL-encoded data, form data, or other formats.
+Express follows a middleware-based approach, meaning you must explicitly tell it how to handle different content types.
+
+
+There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedNote parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original.

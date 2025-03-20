@@ -51,7 +51,7 @@ app.get('/info',(req,res) => {
     res.send(`<p> Phonebook has info for ${noOfPersons} people </p> <p> ${date} </p>`);
 })
 
-app.get('/api/persons/:id', (req,res) => {
+app.get('/api/persons/:id', (req,res,next) => {
     const id = req.params.id
     // const person = Person.find(person => person.id === id);
     // if(person){
@@ -65,13 +65,10 @@ app.get('/api/persons/:id', (req,res) => {
             else {
             res.sendStatus(404).end();
         }
-    }).catch(error => {
-        console.log(error);
-        res.sendStatus(500).end();
-    })
+    }).catch(error => next(error))
 })
 
-app.delete('/api/persons/delete/:id', (req,res) => {
+app.delete('/api/persons/delete/:id', (req,res, next) => {
     const id = req.params.id;
     // const person = persons.find(person => person.id === id);
     // if(person){
@@ -84,9 +81,7 @@ app.delete('/api/persons/delete/:id', (req,res) => {
             .then(result => {
                 res.json(result);
             })
-            .catch(error => {
-                res.sendStatus(404);
-            })
+            .catch(error => next(error))
 })
 
 app.post('/api/persons', (req,res) => {
@@ -122,6 +117,40 @@ app.post('/api/persons', (req,res) => {
         res.json(savedPerson);
     })
 })
+
+app.put('/api/persons/:id', (req,res,next) => {
+    const id = req.params.id;
+    const body = req.body;
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    Person.findByIdAndUpdate(id, person, {new: true}) //if true, return the modified document rather than the original
+            .then(updatedPerson => {
+                if(updatedPerson){
+                    res.json(updatedPerson);
+                } else {
+                    res.sendStatus(404);
+                }
+            })
+            .catch(error => next(error))
+})
+
+const unknownEndpoint = (req,res) => {
+    res.status(404).send({error: 'unknown endpoint'});
+}
+
+app.use(unknownEndpoint);
+
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message);
+    if(error.name === 'CastError'){
+        return res.status(400).send({error: 'malformatted id'});
+    }
+    next(error);
+}
+
+app.use(errorHandler);
 
 
 const PORT = 3001;
