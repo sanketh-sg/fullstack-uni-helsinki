@@ -49,3 +49,6 @@ Express follows a middleware-based approach, meaning you must explicitly tell it
 
 
 There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedNote parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original.
+
+# Validation and ESLint
+

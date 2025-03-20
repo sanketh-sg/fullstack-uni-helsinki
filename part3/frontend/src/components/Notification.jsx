@@ -1,11 +1,11 @@
-/* eslint-disable react/prop-types */
+
 const Notification = ({ message, type }) => {
     if (!message) return null;
   
     const notificationStyle = {
       color: type === "success" ? "green"
       : type === "error" ? "red"
-      : type === "info" ? "yellow"
+      : type === "info" ? "orange"
       : "black",
       background: "lightgrey",
       fontSize: 16,

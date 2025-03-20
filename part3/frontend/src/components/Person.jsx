@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+
 
 
 export default function Person({name, number, id, handleDelete}) {
