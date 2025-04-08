@@ -10,6 +10,8 @@ const Blog = require('../models/blog');
 const blogsHelper = require('./blogs_helper');
 const { title } = require('node:process');
 
+const blogs = blogsHelper.initBlogs;
+
 
 
 test('dummy returns one', () => {
@@ -56,19 +58,19 @@ describe('most likes', () => {
   });
 });
 
-test.only('GET /api/blogs returns blogs as json', async () => {
+test('GET /api/blogs returns blogs as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/);
 });
 
-test.only('unique identifier is id', async () => {
+test('unique identifier is id', async () => {
   const response = await api.get('/api/blogs');
   response.body.forEach((blog) => assert.ok(blog.id));
 });
 
-test.only('POST /api/blogs creates a new blog', async () => {
+test('POST /api/blogs creates a new blog', async () => {
   const blogsAtStart = await blogsHelper.blogsInDb();
   const newBlog = {
     title: 'test Blog',
@@ -91,7 +93,7 @@ test.only('POST /api/blogs creates a new blog', async () => {
     
 });
 
-test.only('POST /api/blogs without likes defaults to 0', async () => {
+test('POST /api/blogs without likes defaults to 0', async () => {
   const newBlog = {
     title: 'test Blog without likes',
     author: 'test Author',
@@ -109,7 +111,7 @@ test.only('POST /api/blogs without likes defaults to 0', async () => {
   assert.strictEqual(createdBlog.likes, 0);
 });
 
-test.only("POST /api/blogs without title and url returns 400", async () => {
+test("POST /api/blogs without title and url returns 400", async () => {
   const newBlog = {
     title: "",
     author: "test Author",
