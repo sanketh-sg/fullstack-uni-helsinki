@@ -20,6 +20,9 @@ blogRouter.get('/', (request, response) => {
     // logger.info('body', body)
 
     const blog = new Blog(request.body)
+    if (!blog.title || !blog.url || blog.title === '' || blog.url === '') {
+      return response.status(400).json({ error: 'title or url missing' })
+    }
     blog
       .save()
       .then(result => {

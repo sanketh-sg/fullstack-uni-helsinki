@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test": "node --test"
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +16,11 @@
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "lodash": "^4.17.21",
-    "mongoose": "^8.13.1"
+    "mongoose": "^8.13.1",
+    "supertest": "^7.1.0"
   }
 }
