@@ -17,3 +17,19 @@ its origin specific each web application has its own storage.
 Values saved to the storage are DOMstrings, so we cannot save a JavaScript object as it is. The object has to be parsed to JSON first, with the method JSON.stringify. Correspondingly, when a JSON object is read from the local storage, it has to be parsed back to JavaScript with JSON.parse.
 
 The empty array as the parameter of the effect ensures that the effect is executed only when the component is rendered for the first time.
+
+The child components are the React elements that we define between the opening and closing tags of a component. Unlike the "normal" props we've seen before, children is automatically added by React and always exists. If a component is defined with an automatically closing /> tag
+
+## Lifting the state up
+When we want to change state of two components always together. To do this we need to do 3 things,
+1. remove the state from child component.
+2. move it to closest parent and pass it down via props.
+3. add state to comman parent. Finally, pass the event handlers down so that the children can change the parent’s state.
+
+## References to components using useRef
+
+When you want a component to “remember” some information, but you don’t want that information to trigger new renders, you can use a ref.
+
+You can access the current value of that ref through the ref.current property. This value is intentionally mutable, meaning you can both read and write to it. It’s like a secret pocket of your component that React doesn’t track. 
+
+There are several different ways to implement access to a component's functions from outside the component, the ref mechanism of React, offers a reference to the component.
