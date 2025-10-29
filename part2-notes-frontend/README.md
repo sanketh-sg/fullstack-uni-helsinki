@@ -1,4 +1,4 @@
-# Event Handlers
+## Event Handlers
  The event handlers are simple: An object is given to them as a parameter, and they destructure the field target from the object and save its value to the state.
 
  If the login is successful, the form fields are emptied and the server response (including a token and the user details) is saved to the user field of the application's state.
@@ -33,3 +33,36 @@ When you want a component to “remember” some information, but you don’t wa
 You can access the current value of that ref through the ref.current property. This value is intentionally mutable, meaning you can both read and write to it. It’s like a secret pocket of your component that React doesn’t track. 
 
 There are several different ways to implement access to a component's functions from outside the component, the ref mechanism of React, offers a reference to the component.
+
+## Testing React apps (Jest, Vitest, jsdom)
+
+Normally React components are rendered to the DOM. The render method we used renders the components in a format that is suitable for tests without rendering them to the DOM.
+
+We can use the object screen to access the rendered component. We use screen's method getByText to search for an element that has the note content and ensure that it exists
+
+The existence of an element is checked using Vitest's expect command. Expect generates an assertion for its argument, the validity of which can be tested using various condition functions. Now we used toBeDefined which tests whether the element argument of expect exists. The getByText command, by default, searches for an element that contains only the text provided as a parameter and nothing else. 
+
+In React there are (at least) two different conventions for the test file's location. We created our test files according to the current standard by placing them in the same directory as the component being tested.
+
+The other convention is to store the test files "normally" in a separate test directory.
+
+### Debugging tests
+We typically run into many different kinds of problems when writing our tests.
+
+Object screen has method debug that can be used to print the HTML of a component to the terminal. 
+
+Mock objects and functions are commonly used stub components in testing that are used for replacing dependencies of the components being tested. Mocks make it possible to return hardcoded responses, and to verify the number of times the mock functions are called and with what parameters.
+
+## Integration testing
+we wrote integration tests for the backend that tested its logic and connected the database through the API provided by the backend. When writing these tests, we made the conscious decision not to write unit tests, as the code for that backend is fairly simple, and it is likely that bugs in our application occur in more complicated scenarios than unit tests are well suited for.
+
+So far all of our tests for the frontend have been unit tests that have validated the correct functioning of individual components. Unit testing is useful at times, but even a comprehensive suite of unit tests is not enough to validate that the application works as a whole.
+
+We could also make integration tests for the frontend. Integration testing tests the collaboration of multiple components. It is considerably more difficult than unit testing, as we would have to for example mock data from the server. 
+
+## Snapshot testing
+Vitest offers a completely different alternative to "traditional" testing called snapshot testing. The interesting feature of snapshot testing is that developers do not need to define any tests themselves, it is simple enough to adopt snapshot testing.
+
+The fundamental principle is to compare the HTML code defined by the component after it has changed to the HTML code that existed before it was changed.
+
+If the snapshot notices some change in the HTML defined by the component, then either it is new functionality or a "bug" caused by accident. Snapshot tests notify the developer if the HTML code of the component changes. The developer has to tell Vitest if the change was desired or undesired. If the change to the HTML code is unexpected, it strongly implies a bug, and the developer can become aware of these potential issues easily thanks to snapshot testing.
