@@ -1,0 +1,17 @@
+{
+  "name": "e2e-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "test": "exec playwright test --project=chromium --project=firefox",
+  "test:report": "exec playwright show-report",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.2"
+  }
+}

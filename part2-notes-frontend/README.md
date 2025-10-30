@@ -66,3 +66,43 @@ Vitest offers a completely different alternative to "traditional" testing called
 The fundamental principle is to compare the HTML code defined by the component after it has changed to the HTML code that existed before it was changed.
 
 If the snapshot notices some change in the HTML defined by the component, then either it is new functionality or a "bug" caused by accident. Snapshot tests notify the developer if the HTML code of the component changes. The developer has to tell Vitest if the change was desired or undesired. If the change to the HTML code is unexpected, it strongly implies a bug, and the developer can become aware of these potential issues easily thanks to snapshot testing.
+
+## End to end testing
+We can do E2E testing of a web application using a browser and a testing library. There are multiple libraries available. One example is Selenium, which can be used with almost any browser. Another browser option is so-called headless browsers, which are browsers with no graphical user interface.
+
+E2E tests are potentially the most useful category of tests because they test the system through the same interface as real users use.
+
+They do have some drawbacks too. Configuring E2E tests is more challenging than unit or integration tests. They also tend to be quite slow, and with a large system, their execution time can be minutes or even hours. This is bad for development because during coding it is beneficial to be able to run tests as often as possible in case of code regressions.
+
+E2E tests can also be flaky. Some tests might pass one time and fail another, even if the code does not change at all.
+
+We try Cypress and Playwright
+
+Cypress is radically different from most libraries suitable for E2E testing, as Cypress tests are run entirely within the browser. Playwright's tests, on the other hand, are executed in the Node process, which is connected to the browser via programming interfaces.
+
+# Redux
+Quite often most of the app state and state altering functions reside directly in the root component. The state and its handler methods have then been passed to other components with props. This works up to a certain point, but when applications grow larger, state management becomes challenging.
+
+Flux was introduced to make it easier to manage state, Redux was built using same principles.
+
+As in Flux, in Redux the state is also stored in a store.
+
+The whole state of the application is stored in one JavaScript object in the store. Because our application only needs the value of the counter, we will save it straight to the store. If the state was more complicated, different things in the state would be saved as separate fields of the object.
+
+The state of the store is changed with actions. Actions are objects, which have at least a field determining the type of the action.
+
+The impact of the action to the state of the application is defined using a reducer. In practice, a reducer is a function that is given the current state and an action as parameters. It returns a new state.
+
+The reducer is never supposed to be called directly from the application's code. It is only given as a parameter to the createStore function which creates the store
+
+The store now uses the reducer to handle actions, which are dispatched or 'sent' to the store with its dispatch method.
+
+create reducerFunc --> createStore --> createStore.dispatch(reducerFunc.type) (eg. store.dispatch({ type: 'INCREMENT' }))
+
+The third important method that the store has is subscribe, which is used to create callback functions that the store calls whenever an action is dispatched to the store. For every dispatch call this callback fucntion will be called.
+
+When the state in the store is changed, React is not able to automatically re-render the application. Thus we have registered a function renderApp, which renders the whole app, to listen for changes in the store with the store.subscribe method. Note that we have to immediately call the renderApp method. Without the call, the first rendering of the app would never happen.
+
+Reducers are pure functions, Pure functions are such, that they do not cause any side effects and they must always return the same response when called with the same parameters.
+
+A reducer state must be composed of immutable objects. If there is a change in the state, the old object is not changed, but it is replaced with a new, changed, object. 
