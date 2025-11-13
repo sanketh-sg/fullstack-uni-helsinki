@@ -1,0 +1,55 @@
+name: deployment-pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened,synchronize]
+jobs:
+  code-checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run checkout action
+        uses: actions/checkout@v5
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10'
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm install
+      - name: run eslint
+        run: pnpm eslint
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+             ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install dependencies for playwright tests
+        run: pnpm install ci
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Run Playwright tests
+        run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' }}
+        env: 
+          deploy_url: ${{ secrets.RENDER_DEPLOY_URL }}
+        run: |
+          curl "$deploy_url"
+      
